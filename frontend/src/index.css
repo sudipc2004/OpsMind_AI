@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-purple: #8b5cf6;
+  --color-brand-cyan: #00d4ff;
+  --color-brand-emerald: #10b981;
+  --color-brand-rose: #f43f5e;
+
+  --color-bg-base: #080c14;
+  --color-bg-surface: #0b111a;
+  --color-bg-glass: rgba(16, 24, 39, 0.65);
+  --color-bg-elevated: rgba(16, 24, 39, 0.95);
+
+  --color-text-primary: #f0f6ff;
+  --color-text-secondary: #8b98b4;
+  --color-text-muted: #4b5563;
+
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+  --color-border-active: rgba(0, 212, 255, 0.35);
+
+  --animate-pulse-dot: pulse-dot 2s ease-in-out infinite;
+  --animate-progress-anim: progress-anim 1.5s ease-in-out infinite;
+  --animate-orb-float: orb-float 4s ease-in-out infinite;
+  --animate-orb-ring: orb-ring 4s ease-in-out infinite;
+  --animate-orb-drift: orb-drift 10s ease-in-out infinite alternate;
+  --animate-typing-bounce: typing-bounce 1.2s ease-in-out infinite;
+  --animate-blink: blink 0.8s step-end infinite;
+  --animate-fade-in-up: fadeInUp 0.35s ease;
+
+  --font-inter: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-inter bg-bg-base text-text-primary min-h-screen overflow-x-hidden;
+    background-image: radial-gradient(ellipse at 50% 0%, rgba(0, 212, 255, 0.12) 0%, transparent 70%);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.4);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.7);
+}
+
+/* Keyframes */
+@keyframes pulse-dot {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes progress-anim {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+@keyframes orb-float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes orb-ring {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 0.2;
+  }
+}
+
+@keyframes orb-drift {
+  0% {
+    transform: translate(-10%, -10%) scale(1);
+  }
+
+  100% {
+    transform: translate(10%, 10%) scale(1.1);
+  }
+}
+
+@keyframes typing-bounce {
+
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+
+  30% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Shared markdown formatting utilities for prose */
+@layer utilities {
+  .prose-custom h1 {
+    @apply text-[1.1rem] font-bold text-text-primary mt-3 mb-1.5;
+  }
+
+  .prose-custom h2 {
+    @apply text-[1rem] font-bold text-text-primary mt-3 mb-1.5;
+  }
+
+  .prose-custom h3 {
+    @apply text-[0.92rem] font-bold text-text-primary mt-3 mb-1.5;
+  }
+
+  .prose-custom ul,
+  .prose-custom ol {
+    @apply pl-5 my-2;
+  }
+
+  .prose-custom li {
+    @apply my-1 list-disc;
+  }
+
+  .prose-custom strong {
+    @apply text-brand-cyan font-semibold;
+  }
+
+  .prose-custom code {
+    @apply bg-black/35 border border-border-subtle rounded px-1.5 py-0.5 font-mono text-[0.82em] text-[#8b5cf6];
+  }
+
+  .prose-custom pre {
+    @apply bg-[rgba(0,0,0,0.4)] border border-border-subtle rounded-sm p-3.5 overflow-x-auto my-2.5;
+  }
+
+  .prose-custom pre code {
+    @apply border-none p-0 bg-transparent text-brand-cyan;
+  }
+
+  .prose-custom blockquote {
+    @apply border-l-[3px] border-brand-purple px-3.5 py-1 my-2 text-text-secondary italic;
+  }
+
+  /* Gradient text utility */
+  .text-gradient-brand {
+    @apply bg-gradient-to-br from-brand-cyan to-brand-purple text-transparent bg-clip-text;
+  }
+}
