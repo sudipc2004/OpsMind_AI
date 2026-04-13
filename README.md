@@ -18,6 +18,11 @@ MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/?retryWrites=t
 MONGODB_DB=opsmind
 MONGODB_COLLECTION=sop_chunks
 PORT=5000
+JWT_SECRET=your_secure_random_string
+
+# Optional: To enable real email OTPs (requires a Gmail App Password)
+SMTP_USER=your_email@gmail.com
+SMTP_PASS=your_gmail_app_password
 ```
 
 ---
