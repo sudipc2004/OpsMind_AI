@@ -1,60 +1,40 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const uploadRouter = require('./routes/upload');
-const queryRouter = require('./routes/query');
-const authRouter = require('./routes/auth');
-const { requireAuth } = require('./lib/authMiddleware');
+const express = require("express");
+const { exec } = require("child_process");
+const path = require("path");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-
-// ── Middleware ──────────────────────────────────────────────────────────────
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 app.use(express.json());
 
-// ── Routes ──────────────────────────────────────────────────────────────────
-app.use('/api/auth', authRouter);
-app.use('/api/upload', requireAuth, uploadRouter);
-app.use('/api/query', requireAuth, queryRouter);
-
-// ── Health check ─────────────────────────────────────────────────────────────
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', message: 'OpsMind AI Backend is running' });
+// Test route
+app.get("/", (req, res) => {
+  res.send("Server is running");
 });
 
-// ── Error handler ─────────────────────────────────────────────────────────────
-app.use((err, _req, res, _next) => {
-  console.error('[Error]', err);
-  res.status(500).json({ error: err.message || 'Internal server error' });
+// AI route
+app.post("/analyze", (req, res) => {
+  const log = req.body.log;
+
+  // Correct path to predict.py
+  const scriptPath = path.join(__dirname, "../ml_model/predict.py");
+
+  exec(
+    `py "${scriptPath}" "${log}"`,
+    { cwd: path.join(__dirname, "../ml_model") }, // VERY IMPORTANT
+    (error, stdout, stderr) => {
+      console.log("STDOUT:", stdout);
+      console.log("STDERR:", stderr);
+
+      if (error) {
+        console.error("ERROR:", error);
+        return res.json({ result: "Error in AI" });
+      }
+
+      res.json({ result: stdout.trim() });
+    }
+  );
 });
 
-// ── Model Check ─────────────────────────────────────────────────────────────
-(async () => {
-  try {
-    const { GoogleGenerativeAI } = require('@google/generative-ai');
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    // There isn't a direct listModels in the SDK for API keys usually, 
-    // but we can try to initialize one to verify it doesn't immediately crash.
-    console.log('[Gemini] Initializing models...');
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
-    console.log('[Gemini] Model "gemini-2.5-flash" is configured');
-  } catch (err) {
-    console.warn('[Gemini Warn] Could not pre-verify model:', err.message);
-  }
-})();
-
-const path = require('path');
-
-// ── Serve Frontend ────────────────────────────────────────────────────────────
-// In production, serve the compiled vite application
-const distPath = path.join(__dirname, '../frontend/dist');
-app.use(express.static(distPath));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'));
-});
-
-app.listen(PORT, () => {
-  console.log(`\n🚀 OpsMind AI Backend running on http://localhost:${PORT}\n`);
+// Start server
+app.listen(5000, () => {
+  console.log("Server running on port 5000");
 });
