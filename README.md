@@ -80,9 +80,11 @@ npm run dev
 ## Using the App
 
 1. Open **http://localhost:5173**
-2. In the **left sidebar**, click "Drop PDF or click to browse" and upload an SOP PDF
-3. Wait for "Successfully indexed X chunks" toast
-4. Type your question in the chat — streaming answers with cited sources!
+2. **Login/Signup**: Enter your work email and password. A new account will be created automatically if it doesn't exist.
+3. **Verify OTP**: Check your terminal (or your email if SMTP is configured in `.env`) for the 6-digit verification code and enter it.
+4. In the **left sidebar**, click "Drop PDF or click to browse" and upload an SOP PDF
+5. Wait for "Successfully indexed X chunks" toast
+6. Type your question in the chat — streaming answers with cited sources!
 
 ---
 
@@ -103,4 +105,5 @@ Express Backend
         │
         ▼
     React renders streaming text + sources
+test change for PR
 ```
